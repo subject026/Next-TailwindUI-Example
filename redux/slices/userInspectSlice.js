@@ -2,20 +2,17 @@ import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import apiClient from "../../pages/api/axios";
 
 const initialState = {
-  isDataAvailable: false,
-  _id: "",
-  discordName: "",
-  discordAvatar:"",
-  discriminator:"",
-  bio: "",
-  skills: [],
-  projects: [],
+    isDataAvailable: false,
+    _id: "",
+    discordName: "",
+    discordAvatar:"",
+    discriminator:"",
+    bio: "",
+    skills: [],
+    projects: [],
 };
 
-export const findMember = createAsyncThunk("get data", async () => {
-
-  console.log("findMember - memberSlice = " )
-
+export const findUser = createAsyncThunk("get data", async (field) => {
   const response = await apiClient({
     data: {
       query: `query{
@@ -27,7 +24,6 @@ export const findMember = createAsyncThunk("get data", async () => {
           discordAvatar
           discriminator
           bio
-        
           skills {
             tagName
             authors{
@@ -43,7 +39,7 @@ export const findMember = createAsyncThunk("get data", async () => {
               description
             }
             champion
-          }    
+          } 
         }
       }`,
     },
@@ -54,24 +50,24 @@ export const findMember = createAsyncThunk("get data", async () => {
   return response.data.data.findMember;
 });
 
-export const memberSlice = createSlice({
+export const userInspectSlice = createSlice({
   name: "member",
   initialState,
   reducers: {},
   extraReducers: {
-    [findMember.fulfilled]: (state, {payload}) => {
-      console.log("payload", payload)
-      state.isDataAvailable = true;
-      state._id = payload._id;
-      state.discordName = payload.discordName;
-      state.discriminator = payload.discriminator;
-      state.bio = payload.bio;
-      state.skills = payload.skills;
-      state.projects = payload.projects;
+    [findUser.fulfilled]: (state, {payload}) => {
+        console.log("payload in userSlice", payload)
+        state.isDataAvailable = payload.isDataAvailable
+        state._id = payload._id
+        state.discordName = payload.discordName
+        state.discordAvatar = payload.discordAvatar
+        state.discriminator = payload.discriminator
+        state.bio = payload.bio
+        state.skills = payload.skills
+        state.projects = payload.projects
 
     },
   },
 });
 
-
-export default memberSlice.reducer;
+export default userInspectSlice.reducer;
