@@ -14,8 +14,6 @@ export const findProjects = createAsyncThunk("find projects", async () => {
         findMember(fields:{
           _id: "995604464469803048"
         }){
-          _id
-          discordName
           projects {
             champion
             info {
@@ -25,6 +23,7 @@ export const findProjects = createAsyncThunk("find projects", async () => {
                 memberInfo {
                   discordName
                 }
+                phase
               }
             }      
           }      
@@ -44,7 +43,6 @@ export const projectsInspectSlice = createSlice({
       state,
       { payload: { discordName, projects } }
     ) => {
-      state.discordName = discordName;
       state.isDataAvailable = true;
       state.numberOfProjects = projects.length;
       state.projects = projects;
