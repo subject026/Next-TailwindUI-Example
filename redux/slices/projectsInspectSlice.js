@@ -7,35 +7,32 @@ const initialState = {
   projects: [],
 };
 
-export const findProjects = createAsyncThunk("find all projects ", async () => {
+export const findProjects = createAsyncThunk("find projects", async () => {
   const response = await apiClient({
     data: {
       query: `query{
-          findMember(fields:{
-            _id: "995604464469803048"
-          }){
-            _id
-            discordName
-            projects {
-              champion
-              info {
-                _id
-                title
-                team {
-                  memberInfo{
-                    discordName
-                  }
-                  phase
+        findMember(fields:{
+          _id: "995604464469803048"
+        }){
+          _id
+          discordName
+          projects {
+            champion
+            info {
+              title
+              description
+              team {
+                memberInfo {
+                  discordName
                 }
               }
-              
-            }
-              
-          }
-        }`,
+            }      
+          }      
+        }
+      }`,
     },
   });
-  return response.data.data.findProjects;
+  return response.data.data.findMember;
 });
 
 export const projectsInspectSlice = createSlice({
@@ -43,10 +40,14 @@ export const projectsInspectSlice = createSlice({
   initialState,
   reducers: {},
   extraReducers: {
-    [findProjects.fulfilled]: (state, { payload }) => {
+    [findProjects.fulfilled]: (
+      state,
+      { payload: { discordName, projects } }
+    ) => {
+      state.discordName = discordName;
       state.isDataAvailable = true;
-      state.numberOfProjects = payload.length;
-      state.projects = payload;
+      state.numberOfProjects = projects.length;
+      state.projects = projects;
     },
   },
 });
