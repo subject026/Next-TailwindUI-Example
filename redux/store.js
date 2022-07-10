@@ -13,7 +13,7 @@ export const store = configureStore({
     userInspect: userInspectReducer,
     usersInspect: usersInspectReducer,
     project: projectReducer,
-    projects: projectsInspectReducer,
+    projectsInspect: projectsInspectReducer,
     skill: skillReducer,
   },
 });
